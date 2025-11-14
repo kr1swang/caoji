@@ -1,0 +1,8 @@
+{
+  "name": "@caoji/monorepo",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
+}
