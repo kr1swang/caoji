@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "lint": "eslint .",
-    "format": "prettier --write ."
+    "pull": "clasp pull",
+    "push": "tsc && clasp push",
+    "deploy": "sh ./deploy.sh"
   },
   "dependencies": {
     "@google/clasp": "^3.1.1"
