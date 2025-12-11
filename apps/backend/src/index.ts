@@ -1,18 +1,8 @@
-const sheetTypes = ['courses', 'portfolio', 'blogs'] as const
-type SheetType = (typeof sheetTypes)[number]
-
-type Course = {
-  id: string
-  datetime: Date
-  title: string
-  content: string
-  images: string[]
-}
+import { type Blog, type Course, type Portfolio, type SheetType, sheetTypes } from '@shared/types'
 
 const SPREADSHEET_ID = '12K9GunsmrIliM4js0AsXfUuYv44oF5TvgpFfbKK6qKs'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function doPost(event: GoogleAppsScript.Events.DoPost) {
+export function doPost(event: GoogleAppsScript.Events.DoPost) {
   const payload = JSON.parse(event.postData?.contents || '{}')
   const isVerified = sheetTypes.includes(payload.type)
   if (!isVerified) throw new Error('Invalid sheet type')
@@ -41,9 +31,37 @@ function doPost(event: GoogleAppsScript.Events.DoPost) {
         .setMimeType(ContentService.MimeType.JSON)
         .setContent(JSON.stringify(result))
     }
-    case 'portfolio':
+    case 'portfolio': {
+      const result: Portfolio[] = rows
+        .filter((row) => row[0])
+        .map((row) => ({
+          id: row[0],
+          datetime: new Date(row[1]),
+          title: row[2],
+          content: row[3],
+          images: row[5]
+            .split('\n')
+            .filter(Boolean)
+            .map((id: string) => `https://drive.google.com/uc?export=view&id=${id.trim()}`)
+        }))
+
+      return ContentService.createTextOutput()
+        .setMimeType(ContentService.MimeType.JSON)
+        .setContent(JSON.stringify(result))
+    }
     case 'blogs': {
-      const result = [] as unknown[]
+      const result: Blog[] = rows
+        .filter((row) => row[0])
+        .map((row) => ({
+          id: row[0],
+          datetime: new Date(row[1]),
+          title: row[2],
+          content: row[3],
+          images: row[5]
+            .split('\n')
+            .filter(Boolean)
+            .map((id: string) => `https://drive.google.com/uc?export=view&id=${id.trim()}`)
+        }))
 
       return ContentService.createTextOutput()
         .setMimeType(ContentService.MimeType.JSON)
