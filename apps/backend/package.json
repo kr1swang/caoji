@@ -4,8 +4,7 @@
   "private": true,
   "scripts": {
     "pull": "clasp pull",
-    "push": "tsc && clasp push",
-    "deploy": "sh ./deploy.sh"
+    "push": "tsc && clasp push && sh ./deploy.sh"
   },
   "dependencies": {
     "@google/clasp": "^3.1.1"

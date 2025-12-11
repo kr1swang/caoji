@@ -17,14 +17,12 @@ The backend acts as a lightweight data provider:
 apps/backend/
 │
 ├─ src/
-│   ├─ api.ts              # Entry point for GAS (doGet)
+│   ├─ api.ts              # Entry point for GAS (doPost)
 │   ├─ sheetService.ts     # Interacts with Google Sheets
 │   ├─ validators/         # Data validation logic
 │   ├─ utils/              # Helpers (parsing, etc.)
 │   └─ mock/               # Local development mock data
 │
-├─ sheets/                 # Local JSON templates for testing
-├─ dist/                   # Compiled JS (generated)
 ├─ .clasp.json             # GAS binding (created later)
 └─ tsconfig.json
 ```
