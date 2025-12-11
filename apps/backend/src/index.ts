@@ -1,8 +1,9 @@
-import { type Blog, type Course, type Portfolio, type SheetType, sheetTypes } from '@shared/types'
+import { sheetTypes, type Blog, type Course, type Portfolio, type SheetType } from '@shared/types'
 
 const SPREADSHEET_ID = '12K9GunsmrIliM4js0AsXfUuYv44oF5TvgpFfbKK6qKs'
 
-export function doPost(event: GoogleAppsScript.Events.DoPost) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function doPost(event: GoogleAppsScript.Events.DoPost) {
   const payload = JSON.parse(event.postData?.contents || '{}')
   const isVerified = sheetTypes.includes(payload.type)
   if (!isVerified) throw new Error('Invalid sheet type')

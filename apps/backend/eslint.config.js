@@ -9,7 +9,7 @@ const compat = new FlatCompat({
 
 module.exports = [
   {
-    ignores: ['dist/*', 'node_modules/*', 'eslint.config.js', 'prettier.config.js']
+    ignores: ['dist/*', 'node_modules/*', 'eslint.config.js', 'prettier.config.js', 'src/*.js']
   },
   ...compat.config(sharedConfig)
 ]

@@ -2,8 +2,10 @@
   "compilerOptions": {
     "strict": true,
     "skipLibCheck": true,
-    "target": "ESNext",
-    "module": "CommonJS",
+    "target": "ES2015",
+    "lib": ["ES2015"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "baseUrl": ".",
     "paths": {
       "@shared/*": ["../../packages/shared/src/*"]
