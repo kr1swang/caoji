@@ -3,70 +3,32 @@ import { sheetTypes, type Blog, type Course, type Portfolio, type SheetType } fr
 const SPREADSHEET_ID = '12K9GunsmrIliM4js0AsXfUuYv44oF5TvgpFfbKK6qKs'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function doPost(event: GoogleAppsScript.Events.DoPost) {
-  const payload = JSON.parse(event.postData?.contents || '{}')
-  const isVerified = sheetTypes.includes(payload.type)
+function doGet(event: GoogleAppsScript.Events.DoGet) {
+  const { type } = event.parameter
+  const isVerified = sheetTypes.includes(type as SheetType)
   if (!isVerified) throw new Error('Invalid sheet type')
 
   const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID)
-  const sheet = spreadsheet.getSheetByName(payload.type as SheetType)
+  const sheet = spreadsheet.getSheetByName(type)
   if (!sheet) throw new Error('Sheet not found')
 
   const [, ...rows] = sheet.getDataRange().getValues()
-  switch (payload.type) {
-    case 'courses': {
-      const result: Course[] = rows
-        .filter((row) => row[0])
-        .map((row) => ({
-          id: row[0],
-          datetime: new Date(row[1]),
-          title: row[2],
-          content: row[3],
-          images: row[5]
-            .split('\n')
-            .filter(Boolean)
-            .map((id: string) => `https://drive.google.com/uc?export=view&id=${id.trim()}`)
-        }))
+  const result = processRows(rows)
 
-      return ContentService.createTextOutput()
-        .setMimeType(ContentService.MimeType.JSON)
-        .setContent(JSON.stringify(result))
-    }
-    case 'portfolio': {
-      const result: Portfolio[] = rows
-        .filter((row) => row[0])
-        .map((row) => ({
-          id: row[0],
-          datetime: new Date(row[1]),
-          title: row[2],
-          content: row[3],
-          images: row[5]
-            .split('\n')
-            .filter(Boolean)
-            .map((id: string) => `https://drive.google.com/uc?export=view&id=${id.trim()}`)
-        }))
+  return ContentService.createTextOutput().setMimeType(ContentService.MimeType.JSON).setContent(JSON.stringify(result))
+}
 
-      return ContentService.createTextOutput()
-        .setMimeType(ContentService.MimeType.JSON)
-        .setContent(JSON.stringify(result))
-    }
-    case 'blogs': {
-      const result: Blog[] = rows
-        .filter((row) => row[0])
-        .map((row) => ({
-          id: row[0],
-          datetime: new Date(row[1]),
-          title: row[2],
-          content: row[3],
-          images: row[5]
-            .split('\n')
-            .filter(Boolean)
-            .map((id: string) => `https://drive.google.com/uc?export=view&id=${id.trim()}`)
-        }))
-
-      return ContentService.createTextOutput()
-        .setMimeType(ContentService.MimeType.JSON)
-        .setContent(JSON.stringify(result))
-    }
-  }
+function processRows(rows: string[][]): Course[] | Portfolio[] | Blog[] {
+  return rows
+    .filter((row) => row[0])
+    .map((row) => ({
+      id: row[0],
+      datetime: new Date(row[1]),
+      title: row[2],
+      content: row[3],
+      images: row[5]
+        .split('\n')
+        .filter(Boolean)
+        .map((id: string) => `https://drive.google.com/uc?id=${id.trim()}`)
+    }))
 }
