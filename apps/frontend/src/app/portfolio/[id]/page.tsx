@@ -8,13 +8,13 @@ async function getPortfolio(): Promise<Portfolio[]> {
 
 export async function generateStaticParams() {
   const portfolio = await getPortfolio()
-  return portfolio.map(({ id: slug }) => ({ slug }))
+  return portfolio.map(({ id }) => ({ id }))
 }
 
-export default async function PortfolioDetailPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
+export default async function PortfolioDetailPage({ params }: { params: Promise<Record<'id', string>> }) {
+  const { id } = await params
   const portfolio = await getPortfolio()
-  const item = portfolio.find(({ id }) => id === slug)
+  const item = portfolio.find((entry) => entry.id === id)
 
   return !item ? (
     <div>Portfolio not found</div>

@@ -8,13 +8,13 @@ async function getBlogs(): Promise<Blog[]> {
 
 export async function generateStaticParams() {
   const blogs = await getBlogs()
-  return blogs.map(({ id: slug }) => ({ slug }))
+  return blogs.map(({ id }) => ({ id }))
 }
 
-export default async function BlogPage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
+export default async function BlogPage({ params }: { params: Promise<Record<'id', string>> }) {
+  const { id } = await params
   const blogs = await getBlogs()
-  const blog = blogs.find(({ id }) => id === slug)
+  const blog = blogs.find((entry) => entry.id === id)
 
   return !blog ? (
     <div>Blog not found</div>

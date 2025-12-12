@@ -8,13 +8,13 @@ async function getCourses(): Promise<Course[]> {
 
 export async function generateStaticParams() {
   const courses = await getCourses()
-  return courses.map(({ id: slug }) => ({ slug }))
+  return courses.map(({ id }) => ({ id }))
 }
 
-export default async function CoursePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = await params
+export default async function CoursePage({ params }: { params: Promise<Record<'id', string>> }) {
+  const { id } = await params
   const courses = await getCourses()
-  const course = courses.find(({ id }) => id === slug)
+  const course = courses.find((entry) => entry.id === id)
 
   return !course ? (
     <div>Course not found</div>
