@@ -1,9 +1,9 @@
-import axiosInstance from '@/lib/axios'
+import fetch from '@/lib/api'
 import type { Portfolio } from '@shared/types'
 import Link from 'next/link'
 
 async function getPortfolio(): Promise<Portfolio[]> {
-  const { data } = await axiosInstance.get('?type=portfolio')
+  const data = await fetch<Portfolio[]>('?type=portfolio')
   return data
 }
 

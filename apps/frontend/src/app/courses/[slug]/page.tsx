@@ -1,8 +1,8 @@
-import axiosInstance from '@/lib/axios'
+import fetch from '@/lib/api'
 import type { Course } from '@shared/types'
 
 async function getCourses(): Promise<Course[]> {
-  const { data } = await axiosInstance.get('?type=courses')
+  const data = await fetch<Course[]>('?type=courses')
   return data
 }
 

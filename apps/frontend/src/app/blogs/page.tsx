@@ -1,9 +1,9 @@
-import axiosInstance from '@/lib/axios'
+import fetch from '@/lib/api'
 import type { Blog } from '@shared/types'
 import Link from 'next/link'
 
 async function getBlogs(): Promise<Blog[]> {
-  const { data } = await axiosInstance.get('?type=blogs')
+  const data = await fetch<Blog[]>('?type=blogs')
   return data
 }
 
