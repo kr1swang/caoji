@@ -1,11 +1,11 @@
-import { sheetTypes, type Blog, type Course, type Portfolio, type SheetType } from '@shared/types'
+import { SheetType, type Blog, type Course, type Portfolio } from '@shared/types'
 
 const SPREADSHEET_ID = '12K9GunsmrIliM4js0AsXfUuYv44oF5TvgpFfbKK6qKs'
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 function doGet(event: GoogleAppsScript.Events.DoGet) {
   const { type } = event.parameter
-  const isVerified = sheetTypes.includes(type as SheetType)
+  const isVerified = isValidSheetType(type)
   if (!isVerified) throw new Error('Invalid sheet type')
 
   const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID)
@@ -16,6 +16,10 @@ function doGet(event: GoogleAppsScript.Events.DoGet) {
   const result = processRows(rows)
 
   return ContentService.createTextOutput().setMimeType(ContentService.MimeType.JSON).setContent(JSON.stringify(result))
+}
+
+function isValidSheetType(value: string): value is SheetType {
+  return Object.values(SheetType).includes(value as SheetType)
 }
 
 function processRows(rows: string[][]): Course[] | Portfolio[] | Blog[] {

@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: 'CAOJI Official Site',
+  title: 'CAOJI Official',
   description: 'The official site of CAOJI, a software developer and tech enthusiast.'
 }
 

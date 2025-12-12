@@ -1,5 +1,8 @@
-export const sheetTypes = ['courses', 'portfolio', 'blogs'] as const
-export type SheetType = (typeof sheetTypes)[number]
+export enum SheetType {
+  Courses = 'courses',
+  Portfolio = 'portfolio',
+  Blogs = 'blogs'
+}
 
 export type Course = {
   id: string
