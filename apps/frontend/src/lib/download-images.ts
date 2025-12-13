@@ -1,4 +1,4 @@
-import type { SheetType } from '@shared/types'
+import type { SheetType } from '@caoji/shared/types'
 import fs from 'fs'
 import http from 'http'
 import https from 'https'

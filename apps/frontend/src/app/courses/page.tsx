@@ -1,6 +1,6 @@
 import fetch from '@/lib/api'
 import { getLocalImagePaths } from '@/lib/download-images'
-import { SheetType, type Course } from '@shared/types'
+import { SheetType, type Course } from '@caoji/shared/types'
 import Image from 'next/image'
 import Link from 'next/link'
 

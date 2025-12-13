@@ -1,5 +1,5 @@
 import fetch from '@/lib/api'
-import type { Portfolio } from '@shared/types'
+import type { Portfolio } from '@caoji/shared/types'
 import Link from 'next/link'
 
 async function getPortfolio(): Promise<Portfolio[]> {

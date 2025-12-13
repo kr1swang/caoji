@@ -2,8 +2,9 @@
   "name": "@caoji/shared",
   "version": "1.0.0",
   "private": true,
-  "main": "src/index.ts",
-  "types": "src/index.ts",
+  "exports": {
+    "./types": "./src/types.ts"
+  },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^8.46.4",
     "@typescript-eslint/parser": "^8.46.4",

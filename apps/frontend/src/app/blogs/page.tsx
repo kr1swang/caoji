@@ -1,5 +1,5 @@
 import fetch from '@/lib/api'
-import type { Blog } from '@shared/types'
+import type { Blog } from '@caoji/shared/types'
 import Link from 'next/link'
 
 async function getBlogs(): Promise<Blog[]> {

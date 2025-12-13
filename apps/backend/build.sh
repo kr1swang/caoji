@@ -7,8 +7,7 @@ npx esbuild src/index.ts \
   --platform=neutral \
   --target=es2015 \
   --format=esm \
-  --tree-shaking=false \
-  --alias:@shared/types=../../packages/shared/src/types.ts
+  --tree-shaking=false
 
 if [ $? -eq 0 ]; then
   echo "Build completed successfully!"
