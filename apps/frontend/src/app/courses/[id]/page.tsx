@@ -1,6 +1,8 @@
 import fetch from '@/lib/api'
 import { downloadImages, getLocalImagePaths } from '@/lib/download-images'
-import { SheetType, type Course } from '@caoji/shared/types'
+import { SheetType, type Course } from '@caoji/shared'
+import { format } from 'date-fns'
+import { zhTW } from 'date-fns/locale'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -35,19 +37,16 @@ export default async function CoursePage({ params }: { params: Promise<Record<'i
       <article className="max-w-4xl mx-auto">
         <header className="mb-8">
           <h1 className="text-4xl font-bold mb-4">{course.title}</h1>
-          <time className="text-gray-600">
-            {new Date(course.datetime).toLocaleDateString('zh-TW', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}
-          </time>
+          <time className="text-gray-600">{format(course.datetime, 'PPP', { locale: zhTW })}</time>
         </header>
 
         {localImages.length > 0 && (
           <div className="mb-8 grid grid-cols-1 md:grid-cols-2 gap-4">
             {localImages.map((imagePath, index) => (
-              <div key={index} className="relative w-full h-64 bg-gray-200 rounded-lg overflow-hidden">
+              <div
+                key={index}
+                className="relative w-full h-64 bg-gray-200 rounded-lg overflow-hidden"
+              >
                 <Image
                   src={imagePath}
                   alt={`${course.title} - 圖片 ${index + 1}`}

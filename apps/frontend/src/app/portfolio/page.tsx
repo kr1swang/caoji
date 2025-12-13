@@ -1,5 +1,6 @@
 import fetch from '@/lib/api'
-import type { Portfolio } from '@caoji/shared/types'
+import type { Portfolio } from '@caoji/shared'
+import { format } from 'date-fns'
 import Link from 'next/link'
 
 async function getPortfolio(): Promise<Portfolio[]> {
@@ -7,7 +8,7 @@ async function getPortfolio(): Promise<Portfolio[]> {
   return data
 }
 
-export default async function PortfolioPage() {
+export default async function PortfoliosPage() {
   const portfolio = await getPortfolio()
 
   return (
@@ -21,7 +22,7 @@ export default async function PortfolioPage() {
             className="block p-6 bg-white border border-gray-200 rounded-lg hover:bg-gray-50 transition"
           >
             <h2 className="text-xl font-semibold mb-2">{item.title}</h2>
-            <p className="text-gray-600 text-sm mb-2">{new Date(item.datetime).toLocaleDateString()}</p>
+            <p className="text-gray-600 text-sm mb-2">{format(item.datetime, 'yyyy-MM-dd')}</p>
             <p className="text-gray-700 line-clamp-2">{item.content}</p>
           </Link>
         ))}

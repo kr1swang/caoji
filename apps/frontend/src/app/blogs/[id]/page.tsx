@@ -1,5 +1,5 @@
 import fetch from '@/lib/api'
-import type { Blog } from '@caoji/shared/types'
+import type { Blog } from '@caoji/shared'
 
 async function getBlogs(): Promise<Blog[]> {
   const data = await fetch<Blog[]>('?type=blogs')

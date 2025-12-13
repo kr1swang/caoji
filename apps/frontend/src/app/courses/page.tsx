@@ -1,6 +1,7 @@
 import fetch from '@/lib/api'
 import { getLocalImagePaths } from '@/lib/download-images'
-import { SheetType, type Course } from '@caoji/shared/types'
+import { SheetType, type Course } from '@caoji/shared'
+import { format } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
 
@@ -39,7 +40,9 @@ export default async function CoursesPage() {
                 <h2 className="text-xl font-semibold mb-2 group-hover:text-blue-600 transition-colors">
                   {course.title}
                 </h2>
-                <p className="text-gray-600 text-sm mb-3">{new Date(course.datetime).toLocaleDateString('zh-TW')}</p>
+                <p className="text-gray-600 text-sm mb-3">
+                  {format(course.datetime, 'yyyy-MM-dd')}
+                </p>
                 <p className="text-gray-700 line-clamp-3">{course.content}</p>
               </div>
             </Link>

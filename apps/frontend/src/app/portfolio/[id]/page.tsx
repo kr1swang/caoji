@@ -1,5 +1,5 @@
 import fetch from '@/lib/api'
-import type { Portfolio } from '@caoji/shared/types'
+import type { Portfolio } from '@caoji/shared'
 
 async function getPortfolio(): Promise<Portfolio[]> {
   const data = await fetch<Portfolio[]>('?type=portfolio')
@@ -11,7 +11,7 @@ export async function generateStaticParams() {
   return portfolio.map(({ id }) => ({ id }))
 }
 
-export default async function PortfolioDetailPage({ params }: { params: Promise<Record<'id', string>> }) {
+export default async function PortfolioPage({ params }: { params: Promise<Record<'id', string>> }) {
   const { id } = await params
   const portfolio = await getPortfolio()
   const item = portfolio.find((entry) => entry.id === id)
