@@ -1,4 +1,4 @@
-import { SheetType, type Blog, type Course, type Portfolio } from '@caoji/shared/types'
+import { SheetType, type Blog, type Course, type Portfolio } from '@caoji/types'
 
 const SPREADSHEET_ID = '12K9GunsmrIliM4js0AsXfUuYv44oF5TvgpFfbKK6qKs'
 

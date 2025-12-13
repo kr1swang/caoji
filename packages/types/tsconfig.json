@@ -1,0 +1,4 @@
+{
+  "extends": "@caoji/config/tsconfig.json",
+  "include": ["index.ts"]
+}

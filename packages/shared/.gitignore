@@ -1,7 +1,0 @@
-# dependencies
-node_modules
-
-# build output
-src/**/*.js
-src/**/*.map
-

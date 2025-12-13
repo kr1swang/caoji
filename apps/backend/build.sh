@@ -5,8 +5,8 @@ npx esbuild src/index.ts \
   --bundle \
   --outfile=src/index.js \
   --platform=neutral \
-  --target=es2015 \
-  --format=esm \
+  --target=es2020 \
+  --format=iife \
   --tree-shaking=false
 
 if [ $? -eq 0 ]; then

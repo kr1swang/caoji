@@ -1,17 +1,21 @@
 {
-  "extends": "../../packages/shared/src/tsconfig.json",
+  "extends": "@caoji/config/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
     "noEmit": true,
-    "jsx": "react-jsx",
-    "incremental": true,
+    "allowJs": true,
+    "jsx": "preserve",
     "plugins": [{ "name": "next" }],
     "paths": {
       "@/*": ["./src/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", ".next/dev/types/**/*.ts", "**/*.mts"],
-  "exclude": ["node_modules"]
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts",
+    "**/*.mts"
+  ]
 }

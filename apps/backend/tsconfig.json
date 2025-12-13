@@ -1,8 +1,9 @@
 {
-  "extends": "../../packages/shared/src/tsconfig.json",
+  "extends": "@caoji/config/tsconfig.json",
   "compilerOptions": {
-    "target": "ES2015",
-    "lib": ["ES2015"],
+    "lib": ["esnext"],
+    "noEmit": true,
+    "types": ["google-apps-script"],
     "paths": {
       "@/*": ["./src/*"]
     }

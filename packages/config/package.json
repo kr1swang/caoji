@@ -1,0 +1,21 @@
+{
+  "name": "@caoji/config",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "files": [
+    "eslint.config.js",
+    "prettier.config.js",
+    "tsconfig.json"
+  ],
+  "exports": {
+    "./eslint.config.js": "./eslint.config.js",
+    "./prettier.config.js": "./prettier.config.js",
+    "./tsconfig.json": "./tsconfig.json"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0",
+    "eslint": "^9.0.0",
+    "prettier": "^3.0.0"
+  }
+}

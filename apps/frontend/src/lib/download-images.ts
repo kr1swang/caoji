@@ -1,4 +1,4 @@
-import type { SheetType } from '@caoji/shared/types'
+import type { SheetType } from '@caoji/types'
 import fs from 'fs'
 import http from 'http'
 import https from 'https'
@@ -85,7 +85,9 @@ async function downloadImage(url: string, filepath: string): Promise<void> {
                 fs.unlinkSync(filepath)
                 reject(new Error(`Downloaded file is empty: ${path.basename(filepath)}`))
               } else {
-                console.log(`  ✅ 下載成功: ${path.basename(filepath)} (${(stats.size / 1024).toFixed(2)} KB)`)
+                console.log(
+                  `  ✅ 下載成功: ${path.basename(filepath)} (${(stats.size / 1024).toFixed(2)} KB)`
+                )
                 resolve()
               }
             })
