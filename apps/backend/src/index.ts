@@ -1,4 +1,4 @@
-import { SheetType, type Blog, type Course, type Portfolio } from '@caoji/types'
+import { SheetType, type Blog, type Course, type Portfolio } from '@caoji/shared'
 
 const SPREADSHEET_ID = '12K9GunsmrIliM4js0AsXfUuYv44oF5TvgpFfbKK6qKs'
 
@@ -15,7 +15,9 @@ function doGet(event: GoogleAppsScript.Events.DoGet) {
   const [, ...rows] = sheet.getDataRange().getValues()
   const result = processRows(rows)
 
-  return ContentService.createTextOutput().setMimeType(ContentService.MimeType.JSON).setContent(JSON.stringify(result))
+  return ContentService.createTextOutput()
+    .setMimeType(ContentService.MimeType.JSON)
+    .setContent(JSON.stringify(result))
 }
 
 function isValidSheetType(value: string): value is SheetType {

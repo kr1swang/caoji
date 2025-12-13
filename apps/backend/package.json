@@ -7,7 +7,7 @@
     "push": "sh ./build.sh && clasp push && sh ./deploy.sh"
   },
   "dependencies": {
-    "@caoji/types": "*",
+    "@caoji/shared": "*",
     "@google/clasp": "^3.1.1"
   },
   "devDependencies": {

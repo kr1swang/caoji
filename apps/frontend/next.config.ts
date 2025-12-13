@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
   trailingSlash: true,
   images: { unoptimized: true },
   devIndicators: { position: 'bottom-right' },
-  transpilePackages: ['@caoji/types']
+  transpilePackages: ['@caoji/shared']
 }
 
 export default nextConfig
