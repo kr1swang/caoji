@@ -6,7 +6,7 @@ npx esbuild src/index.ts \
   --outfile=src/index.js \
   --platform=neutral \
   --target=es2020 \
-  --format=iife \
+  --format=esm \
   --tree-shaking=false
 
 if [ $? -eq 0 ]; then
