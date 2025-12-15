@@ -17,11 +17,12 @@ async function getBlogs(): Promise<Blog[]> {
 export async function generateStaticParams() {
   try {
     const blogs = await getBlogs()
-    if (blogs.length === 0) throw new Error('No blogs found, nextjs requires at least one param')
+    if (blogs.length === 0) throw new Error('No blogs found')
     await downloadImages(SheetType.Blogs, blogs)
     return blogs.map(({ id }) => ({ id }))
   } catch (e) {
-    console.warn('generateStaticParams for blogs failed:', e)
+    if (e instanceof Error)
+      console.warn(`\n - generateStaticParams for [blogs] failed: ${e.message}`)
     return [{ id: 'unknown' }]
   }
 }

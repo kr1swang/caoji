@@ -17,12 +17,12 @@ async function getCourses(): Promise<Course[]> {
 export async function generateStaticParams() {
   try {
     const courses = await getCourses()
-    if (courses.length === 0)
-      throw new Error('No courses found, nextjs requires at least one param')
+    if (courses.length === 0) throw new Error('No courses found')
     await downloadImages(SheetType.Courses, courses)
     return courses.map(({ id }) => ({ id }))
   } catch (e) {
-    console.warn('generateStaticParams for courses failed:', e)
+    if (e instanceof Error)
+      console.warn(`\n - generateStaticParams for [courses] failed: ${e.message}`)
     return [{ id: 'unknown' }]
   }
 }
