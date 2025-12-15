@@ -39,7 +39,7 @@ function BlogDetail({ blog }: { blog: Blog }) {
   const localImages = getLocalImagePaths(SheetType.Blogs, blog.id, blog.images)
 
   return (
-    <main className="min-h-screen p-8">
+    <main className="min-h-screen">
       <Link href="/blogs" className="text-blue-600 hover:underline mb-4 inline-block">
         ← Back
       </Link>

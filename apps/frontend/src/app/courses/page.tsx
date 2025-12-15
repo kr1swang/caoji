@@ -14,7 +14,7 @@ export default async function CoursesPage() {
   const courses = await getCourses()
 
   return (
-    <main className="min-h-screen p-8">
+    <main className="min-h-screen">
       <h1 className="text-3xl font-bold mb-8">Courses</h1>
       {courses.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
