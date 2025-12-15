@@ -39,7 +39,7 @@ function CourseDetail({ course }: { course: Course }) {
   const localImages = getLocalImagePaths(SheetType.Courses, course.id, course.images)
 
   return (
-    <div className="min-h-screen p-8">
+    <main className="min-h-screen p-8">
       <Link href="/courses" className="text-blue-600 hover:underline mb-4 inline-block">
         ← Back
       </Link>
@@ -75,6 +75,6 @@ function CourseDetail({ course }: { course: Course }) {
           </div>
         </div>
       </article>
-    </div>
+    </main>
   )
 }

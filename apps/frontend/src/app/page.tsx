@@ -24,11 +24,11 @@ export default async function HomePage() {
   ]
 
   return (
-    <div className="min-h-screen p-8 space-y-12 max-w-7xl mx-auto">
+    <main className="min-h-screen p-8 space-y-12">
       {types.map(({ type, data }, index) => (
         <RecentSection key={index} type={type} list={data} />
       ))}
-    </div>
+    </main>
   )
 }
 

@@ -39,7 +39,7 @@ function PortfolioDetail({ item }: { item: Portfolio }) {
   const localImages = getLocalImagePaths(SheetType.Portfolio, item.id, item.images)
 
   return (
-    <div className="min-h-screen p-8">
+    <main className="min-h-screen p-8">
       <Link href="/portfolio" className="text-blue-600 hover:underline mb-4 inline-block">
         ← Back
       </Link>
@@ -75,6 +75,6 @@ function PortfolioDetail({ item }: { item: Portfolio }) {
           </div>
         </div>
       </article>
-    </div>
+    </main>
   )
 }
