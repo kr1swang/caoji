@@ -15,9 +15,16 @@ async function getCourses(): Promise<Course[]> {
 }
 
 export async function generateStaticParams() {
-  const courses = await getCourses()
-  await downloadImages(SheetType.Courses, courses)
-  return courses.map(({ id }) => ({ id }))
+  try {
+    const courses = await getCourses()
+    if (courses.length === 0)
+      throw new Error('No courses found, nextjs requires at least one param')
+    await downloadImages(SheetType.Courses, courses)
+    return courses.map(({ id }) => ({ id }))
+  } catch (e) {
+    console.warn('generateStaticParams for courses failed:', e)
+    return [{ id: 'unknown' }]
+  }
 }
 
 export default async function CoursePage({ params }: { params: Promise<Record<'id', string>> }) {

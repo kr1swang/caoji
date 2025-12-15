@@ -15,9 +15,16 @@ async function getPortfolio(): Promise<Portfolio[]> {
 }
 
 export async function generateStaticParams() {
-  const portfolio = await getPortfolio()
-  await downloadImages(SheetType.Portfolio, portfolio)
-  return portfolio.map(({ id }) => ({ id }))
+  try {
+    const portfolio = await getPortfolio()
+    if (portfolio.length === 0)
+      throw new Error('No portfolio found, nextjs requires at least one param')
+    await downloadImages(SheetType.Portfolio, portfolio)
+    return portfolio.map(({ id }) => ({ id }))
+  } catch (e) {
+    console.warn('generateStaticParams for portfolio failed:', e)
+    return [{ id: 'unknown' }]
+  }
 }
 
 export default async function PortfolioPage({ params }: { params: Promise<Record<'id', string>> }) {
