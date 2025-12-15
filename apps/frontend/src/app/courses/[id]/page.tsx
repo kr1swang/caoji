@@ -6,6 +6,9 @@ import { zhTW } from 'date-fns/locale'
 import Image from 'next/image'
 import Link from 'next/link'
 
+export const dynamic = 'force-static'
+export const dynamicParams = false
+
 async function getCourses(): Promise<Course[]> {
   const data = await fetch<Course[]>('?type=courses')
   return data
@@ -22,16 +25,16 @@ export default async function CoursePage({ params }: { params: Promise<Record<'i
   const courses = await getCourses()
   const course = courses.find((entry) => entry.id === id)
 
-  if (!course) {
-    return <div className="min-h-screen p-8">Course not found</div>
-  }
+  return !course ? <div>Course not found</div> : <CourseDetail course={course} />
+}
 
+function CourseDetail({ course }: { course: Course }) {
   const localImages = getLocalImagePaths(SheetType.Courses, course.id, course.images)
 
   return (
     <div className="min-h-screen p-8">
       <Link href="/courses" className="text-blue-600 hover:underline mb-4 inline-block">
-        ← 返回課程列表
+        ← Back
       </Link>
 
       <article className="max-w-4xl mx-auto">
