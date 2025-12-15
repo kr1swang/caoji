@@ -6,7 +6,7 @@ const getPublicDir = (type: SheetType) => path.join(process.cwd(), 'public', 'im
 
 const getImageFilename = (id: string, index: number, url: string) => {
   const ext = path.extname(new URL(url).pathname) || '.jpg'
-  return `${id}-${index}${ext}`
+  return `${id}_${index}${ext}`
 }
 
 async function downloadFile(url: string, filepath: string): Promise<void> {
@@ -28,17 +28,16 @@ export async function downloadImages(type: SheetType, items: ItemWithImages[]): 
   const dir = getPublicDir(type)
   if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true })
 
-  console.log(` - Processing ${items.length} items for ${type}...`)
+  console.log(`\n - Processing ${items.length} items for ${type}...`)
 
   for (const item of items) {
-    if (!item.images?.length) continue
-
     for (const [index, url] of item.images.entries()) {
       try {
         const filename = getImageFilename(item.id, index, url)
         await downloadFile(url, path.join(dir, filename))
+        console.log(`\n - Downloaded image successfully: ${type}/${filename}`)
       } catch (e) {
-        if (e instanceof Error) console.warn(` - Download images failed ${url}:`, e.message)
+        if (e instanceof Error) console.warn(`\n - Download images failed ${url}:`, e.message)
       }
     }
   }
