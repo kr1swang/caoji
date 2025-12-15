@@ -18,17 +18,17 @@ export default async function CoursesPage() {
       <h1 className="text-3xl font-bold mb-8">Courses</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {courses.map((course) => {
-          const localImages = getLocalImagePaths(SheetType.Courses, course.id, course.images)
+          const [thumbnail] = getLocalImagePaths(SheetType.Courses, course.id, course.images)
           return (
             <Link
               key={course.id}
               href={`/courses/${course.id}`}
               className="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow overflow-hidden"
             >
-              {localImages.length > 0 && (
+              {thumbnail && (
                 <div className="relative w-full h-48 bg-gray-200">
                   <Image
-                    src={localImages[0]}
+                    src={thumbnail}
                     alt={course.title}
                     fill
                     className="object-cover group-hover:scale-105 transition-transform duration-300"

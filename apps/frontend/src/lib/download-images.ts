@@ -10,13 +10,19 @@ const getImageFilename = (id: string, index: number, url: string) => {
 }
 
 async function downloadFile(url: string, filepath: string): Promise<void> {
-  if (fs.existsSync(filepath) && fs.statSync(filepath).size > 0) return
+  try {
+    if (fs.existsSync(filepath) && fs.statSync(filepath).size > 0) return
 
-  const response = await fetch(url)
-  if (!response.ok) throw new Error(`Status ${response.status}`)
+    const response = await fetch(url)
+    if (!response.ok) throw new Error(`Status ${response.status}`)
 
-  const buffer = Buffer.from(await response.arrayBuffer())
-  fs.writeFileSync(filepath, buffer)
+    const buffer = Buffer.from(await response.arrayBuffer())
+    fs.writeFileSync(filepath, buffer)
+
+    console.log(`\n - Downloaded image successfully: ${filepath}`)
+  } catch (e) {
+    if (e instanceof Error) console.warn(`\n - Download image failed ${filepath}:`, e.message)
+  }
 }
 
 interface ItemWithImages {
@@ -30,17 +36,14 @@ export async function downloadImages(type: SheetType, items: ItemWithImages[]): 
 
   console.log(`\n - Processing ${items.length} items for ${type}...`)
 
-  for (const item of items) {
-    for (const [index, url] of item.images.entries()) {
-      try {
+  await Promise.allSettled(
+    items.flatMap((item) => {
+      return item.images.map(async (url, index) => {
         const filename = getImageFilename(item.id, index, url)
         await downloadFile(url, path.join(dir, filename))
-        console.log(`\n - Downloaded image successfully: ${type}/${filename}`)
-      } catch (e) {
-        if (e instanceof Error) console.warn(`\n - Download images failed ${url}:`, e.message)
-      }
-    }
-  }
+      })
+    })
+  )
 }
 
 export function getLocalImagePaths(type: SheetType, itemId: string, imageUrls: string[]): string[] {

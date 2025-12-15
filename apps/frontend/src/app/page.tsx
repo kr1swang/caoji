@@ -57,17 +57,17 @@ function RecentSection<T extends TypeItem>({ type, list }: RecentSectionProps<T>
       {list.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {list.map((item) => {
-            const localImages = getLocalImagePaths(type, item.id, item.images)
+            const [thumbnail] = getLocalImagePaths(type, item.id, item.images)
             return (
               <Link
                 key={item.id}
                 href={`/${type}/${item.id}`}
                 className="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow overflow-hidden"
               >
-                {localImages.length > 0 && (
+                {thumbnail && (
                   <div className="relative w-full h-48 bg-gray-200">
                     <Image
-                      src={localImages[0]}
+                      src={thumbnail}
                       alt={item.title}
                       fill
                       className="object-cover group-hover:scale-105 transition-transform duration-300"
