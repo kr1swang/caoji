@@ -49,8 +49,8 @@ function RecentSection<T extends TypeItem>({ type, list }: RecentSectionProps<T>
   return (
     <section>
       <div className="flex items-center justify-between mb-6">
-        <h2 className="text-3xl font-bold">Latest Courses</h2>
-        <Link href="/courses" className="text-blue-600 hover:underline">
+        <h2 className="text-3xl font-bold capitalize">{`Latest ${type}`}</h2>
+        <Link href={`/${type}`} className="text-blue-600 hover:underline">
           View All
         </Link>
       </div>
