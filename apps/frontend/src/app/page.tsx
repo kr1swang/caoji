@@ -1,52 +1,96 @@
+import fetch from '@/lib/api'
+import { getLocalImagePaths } from '@/lib/download-images'
+import { SheetType, type Blog, type Course, type Portfolio } from '@caoji/shared'
+import { format } from 'date-fns'
 import Image from 'next/image'
+import Link from 'next/link'
 
-export default function Home() {
+async function getData() {
+  const results = await Promise.all([
+    fetch<Blog[]>('?type=blogs'),
+    fetch<Course[]>('?type=courses'),
+    fetch<Portfolio[]>('?type=portfolio')
+  ])
+  const [blogs, courses, portfolio] = results.map((result) => result.slice(0, 2))
+  return { blogs, courses, portfolio }
+}
+
+export default async function HomePage() {
+  const { blogs, courses, portfolio } = await getData()
+  const types = [
+    { type: SheetType.Blogs, data: blogs },
+    { type: SheetType.Courses, data: courses },
+    { type: SheetType.Portfolio, data: portfolio }
+  ]
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image className="dark:invert" src="/next.svg" alt="Next.js logo" width={100} height={20} priority />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{' '}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{' '}
-            or the{' '}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{' '}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image className="dark:invert" src="/vercel.svg" alt="Vercel logomark" width={16} height={16} />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/8 px-5 transition-colors hover:border-transparent hover:bg-black/4 dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+    <div className="min-h-screen p-8 space-y-12 max-w-7xl mx-auto">
+      {types.map(({ type, data }, index) => (
+        <RecentSection key={index} type={type} list={data} />
+      ))}
     </div>
+  )
+}
+
+type TypeItem = {
+  id: string
+  images: string[]
+  title: string
+  datetime: Date
+  content: string
+}
+
+interface RecentSectionProps<T extends TypeItem> {
+  type: SheetType
+  list: T[]
+}
+
+function RecentSection<T extends TypeItem>({ type, list }: RecentSectionProps<T>) {
+  return (
+    <section>
+      <div className="flex items-center justify-between mb-6">
+        <h2 className="text-3xl font-bold">Latest Courses</h2>
+        <Link href="/courses" className="text-blue-600 hover:underline">
+          View All
+        </Link>
+      </div>
+      {list.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          {list.map((item) => {
+            const localImages = getLocalImagePaths(type, item.id, item.images)
+            return (
+              <Link
+                key={item.id}
+                href={`/${type}/${item.id}`}
+                className="group block bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow overflow-hidden"
+              >
+                {localImages.length > 0 && (
+                  <div className="relative w-full h-48 bg-gray-200">
+                    <Image
+                      src={localImages[0]}
+                      alt={item.title}
+                      fill
+                      className="object-cover group-hover:scale-105 transition-transform duration-300"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    />
+                  </div>
+                )}
+                <div className="p-6">
+                  <h3 className="text-xl font-semibold mb-2 group-hover:text-blue-600 transition-colors">
+                    {item.title}
+                  </h3>
+                  <p className="text-gray-600 text-sm mb-3">
+                    {format(item.datetime, 'yyyy-MM-dd')}
+                  </p>
+                  <p className="text-gray-700 line-clamp-3">{item.content}</p>
+                </div>
+              </Link>
+            )
+          })}
+        </div>
+      ) : (
+        <div className="p-6 bg-gray-50 rounded-lg text-center text-gray-500">No item found.</div>
+      )}
+    </section>
   )
 }
