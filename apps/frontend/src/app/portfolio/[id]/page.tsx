@@ -32,7 +32,7 @@ export default async function PortfolioPage({ params }: { params: Promise<Record
   const portfolio = await getPortfolio()
   const item = portfolio.find((entry) => entry.id === id)
 
-  return !item ? <div>Portfolio not found</div> : <PortfolioDetail item={item} />
+  return !item ? <main>Portfolio not found</main> : <PortfolioDetail item={item} />
 }
 
 function PortfolioDetail({ item }: { item: Portfolio }) {
@@ -44,7 +44,7 @@ function PortfolioDetail({ item }: { item: Portfolio }) {
         ← Back
       </Link>
 
-      <article className="max-w-4xl mx-auto">
+      <article>
         <header className="mb-8">
           <h1 className="text-4xl font-bold mb-4">{item.title}</h1>
           <time className="text-gray-600">{format(item.datetime, 'PPP', { locale: zhTW })}</time>

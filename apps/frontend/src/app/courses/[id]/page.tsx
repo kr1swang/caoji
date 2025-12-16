@@ -32,7 +32,7 @@ export default async function CoursePage({ params }: { params: Promise<Record<'i
   const courses = await getCourses()
   const course = courses.find((entry) => entry.id === id)
 
-  return !course ? <div>Course not found</div> : <CourseDetail course={course} />
+  return !course ? <main>Course not found</main> : <CourseDetail course={course} />
 }
 
 function CourseDetail({ course }: { course: Course }) {
@@ -44,7 +44,7 @@ function CourseDetail({ course }: { course: Course }) {
         ← Back
       </Link>
 
-      <article className="max-w-4xl mx-auto">
+      <article>
         <header className="mb-8">
           <h1 className="text-4xl font-bold mb-4">{course.title}</h1>
           <time className="text-gray-600">{format(course.datetime, 'PPP', { locale: zhTW })}</time>

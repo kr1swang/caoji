@@ -32,7 +32,7 @@ export default async function BlogPage({ params }: { params: Promise<Record<'id'
   const blogs = await getBlogs()
   const blog = blogs.find((entry) => entry.id === id)
 
-  return !blog ? <div>Blog not found</div> : <BlogDetail blog={blog} />
+  return !blog ? <main>Blog not found</main> : <BlogDetail blog={blog} />
 }
 
 function BlogDetail({ blog }: { blog: Blog }) {
@@ -44,7 +44,7 @@ function BlogDetail({ blog }: { blog: Blog }) {
         ← Back
       </Link>
 
-      <article className="max-w-4xl mx-auto">
+      <article>
         <header className="mb-8">
           <h1 className="text-4xl font-bold mb-4">{blog.title}</h1>
           <time className="text-gray-600">{format(blog.datetime, 'PPP', { locale: zhTW })}</time>

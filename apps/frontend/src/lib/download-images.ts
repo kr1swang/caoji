@@ -13,6 +13,7 @@ async function compressImage(buffer: Buffer, ext: string): Promise<Buffer> {
       return await sharp(buffer).png({ quality: 80, compressionLevel: 9 }).toBuffer()
     case '.jpg':
     case '.jpeg':
+    case '.jfif':
       return await sharp(buffer).jpeg({ quality: 80, mozjpeg: true }).toBuffer()
     case '.webp':
       return await sharp(buffer).webp({ quality: 80 }).toBuffer()
