@@ -1,15 +1,11 @@
 import type { SheetType } from '@caoji/shared'
 import fs from 'fs'
+import mime from 'mime'
 import path from 'path'
 import sharp from 'sharp'
 import { formatFileSize } from './utils'
 
 const getPublicDir = (type: SheetType) => path.join(process.cwd(), 'public', 'images', type)
-
-const getImageFilename = (id: string, index: number, url: string) => {
-  const ext = path.extname(new URL(url).pathname) || '.jpg'
-  return `${id}_${index}${ext}`
-}
 
 async function compressImage(buffer: Buffer, ext: string): Promise<Buffer> {
   switch (ext.toLowerCase()) {
@@ -25,61 +21,73 @@ async function compressImage(buffer: Buffer, ext: string): Promise<Buffer> {
   }
 }
 
-interface FileMeta {
-  lastModified: string | null
-  contentLength: string | null
-  compressedSize: number
-}
+type FileMeta = Record<'lastModified' | 'contentLength' | 'contentType', string | null>
 
-async function isFileUpToDate(url: string, metaPath: string): Promise<boolean> {
-  if (!fs.existsSync(metaPath)) return false
-
-  const localMeta: FileMeta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'))
-  const headResponse = await fetch(url, { method: 'HEAD' })
-  const { lastModified, contentLength } = {
-    lastModified: headResponse.headers.get('last-modified'),
-    contentLength: headResponse.headers.get('content-length')
-  }
-
-  return !!(
-    lastModified &&
-    contentLength &&
-    localMeta.lastModified === lastModified &&
-    localMeta.contentLength === contentLength
-  )
-}
-
-async function downloadFile(url: string, filePath: string): Promise<void> {
+function getLocalMeta(metaPath: string): FileMeta | null {
   try {
-    const metaPath = `${filePath}.meta`
-    const filename = path.basename(filePath)
+    if (!fs.existsSync(metaPath)) throw new Error('Local Meta file does not exist')
+    const localMeta: FileMeta = JSON.parse(fs.readFileSync(metaPath, 'utf-8'))
+    return localMeta
+  } catch {
+    return null
+  }
+}
 
-    if (fs.existsSync(filePath) && (await isFileUpToDate(url, metaPath))) {
-      console.log(`\n ○ ${filename} - Up to date`)
+async function getRemoteMeta(url: string): Promise<FileMeta> {
+  const headResponse = await fetch(url, { method: 'HEAD' })
+  if (!headResponse.ok) throw new Error('Remote Meta fetch failed')
+  const remoteMeta: FileMeta = {
+    lastModified: headResponse.headers.get('last-modified'),
+    contentLength: headResponse.headers.get('content-length'),
+    contentType: headResponse.headers.get('content-type')
+  }
+  return remoteMeta
+}
+
+function isFileUpToDate(localMeta: FileMeta | null, remoteMeta: FileMeta): boolean {
+  try {
+    if (!localMeta) throw new Error('Local Meta not found')
+    const keys: (keyof FileMeta)[] = ['lastModified', 'contentLength', 'contentType']
+    if (!keys.every((key) => remoteMeta[key] && localMeta[key] === remoteMeta[key]))
+      throw new Error('File meta mismatch')
+    return true
+  } catch (e) {
+    return false
+  }
+}
+
+async function downloadFile(url: string, basePath: string): Promise<void> {
+  try {
+    const metaPath = `${basePath}.meta`
+    const localMeta = getLocalMeta(metaPath)
+    const remoteMeta = await getRemoteMeta(url)
+
+    const filePath = `${basePath}.${mime.getExtension(remoteMeta.contentType || 'image/jpeg')}`
+    const isFileExists = fs.existsSync(filePath)
+
+    if (isFileExists && isFileUpToDate(localMeta, remoteMeta)) {
+      console.log(`\n ○ ${path.basename(basePath)} - Up to date`)
       return
     }
 
     const response = await fetch(url)
     if (!response.ok) throw new Error(`Status ${response.status}`)
-
+    const fileMeta: FileMeta = {
+      lastModified: response.headers.get('last-modified'),
+      contentLength: response.headers.get('content-length'),
+      contentType: response.headers.get('content-type')
+    }
     const buffer = Buffer.from(await response.arrayBuffer())
     const compressed = await compressImage(buffer, path.extname(filePath))
 
     fs.writeFileSync(filePath, compressed)
-    fs.writeFileSync(
-      metaPath,
-      JSON.stringify({
-        lastModified: response.headers.get('last-modified'),
-        contentLength: response.headers.get('content-length'),
-        compressedSize: compressed.length
-      })
-    )
+    fs.writeFileSync(metaPath, JSON.stringify(fileMeta))
 
     console.log(
-      `\n ✓ ${filename} (${formatFileSize(buffer.length)} → ${formatFileSize(compressed.length)})`
+      `\n ✓ ${path.basename(basePath)} (${formatFileSize(buffer.length)} → ${formatFileSize(compressed.length)})`
     )
   } catch (e) {
-    if (e instanceof Error) console.warn(`\n ✗ ${path.basename(filePath)}: ${e.message}`)
+    if (e instanceof Error) console.warn(`\n ✗ ${path.basename(basePath)}: ${e.message}`)
   }
 }
 
@@ -97,7 +105,7 @@ export async function downloadImages(type: SheetType, items: ItemWithImages[]): 
   await Promise.allSettled(
     items.flatMap((item) => {
       return item.images.map(async (url, index) => {
-        const filename = getImageFilename(item.id, index, url)
+        const filename = `${item.id}_${index}`
         await downloadFile(url, path.join(dir, filename))
       })
     })
@@ -105,5 +113,11 @@ export async function downloadImages(type: SheetType, items: ItemWithImages[]): 
 }
 
 export function getLocalImagePaths(type: SheetType, itemId: string, imageUrls: string[]): string[] {
-  return imageUrls.map((url, i) => `/images/${type}/${getImageFilename(itemId, i, url)}`)
+  return imageUrls.map((_, index) => {
+    const dir = getPublicDir(type)
+    const filename = `${itemId}_${index}`
+    const localMeta = getLocalMeta(path.join(dir, `${filename}.meta`))
+    const ext = mime.getExtension(localMeta?.contentType || 'image/jpeg')
+    return `/images/${type}/${filename}.${ext}`
+  })
 }
