@@ -24,6 +24,11 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
+      - name: Auth clasp
+        run: |
+          echo '${{ secrets.CLASP_CREDENTIALS }}' > creds.json
+          npx clasp login --creds creds.json --no-localhost
+
       - name: Generate .env
         run: yarn run gen-env
 
