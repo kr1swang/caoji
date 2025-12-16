@@ -120,7 +120,8 @@ export function getLocalImagePaths(type: SheetType, itemId: string, imageUrls: s
     const dir = getPublicDir(type)
     const filename = `${itemId}_${index}`
     const localMeta = getLocalMeta(path.join(dir, `${filename}.meta`))
-    const ext = mime.getExtension(localMeta?.contentType || 'image/jpeg')
+    if (!localMeta) return '/images/placeholder.png'
+    const ext = mime.getExtension(localMeta.contentType || 'image/jpeg')
     return `/images/${type}/${filename}.${ext}`
   })
 }
