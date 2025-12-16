@@ -31,7 +31,7 @@ export default async function BlogPage({ params }: { params: Promise<Record<'id'
   const blogs = await getBlogs()
   const blog = blogs.find((entry) => entry.id === id)
 
-  return !blog ? <main>Blog not found</main> : <BlogDetail blog={blog} />
+  return blog && <BlogDetail blog={blog} />
 }
 
 function BlogDetail({ blog }: { blog: Blog }) {

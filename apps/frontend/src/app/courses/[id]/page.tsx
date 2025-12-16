@@ -31,7 +31,7 @@ export default async function CoursePage({ params }: { params: Promise<Record<'i
   const courses = await getCourses()
   const course = courses.find((entry) => entry.id === id)
 
-  return !course ? <main>Course not found</main> : <CourseDetail course={course} />
+  return course && <CourseDetail course={course} />
 }
 
 function CourseDetail({ course }: { course: Course }) {

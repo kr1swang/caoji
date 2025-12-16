@@ -31,7 +31,7 @@ export default async function PortfolioPage({ params }: { params: Promise<Record
   const portfolio = await getPortfolio()
   const item = portfolio.find((entry) => entry.id === id)
 
-  return !item ? <main>Portfolio not found</main> : <PortfolioDetail item={item} />
+  return item && <PortfolioDetail item={item} />
 }
 
 function PortfolioDetail({ item }: { item: Portfolio }) {
