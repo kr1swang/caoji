@@ -25,7 +25,7 @@ export default async function HomePage() {
   ]
 
   return (
-    <main className="min-h-screen space-y-12">
+    <main className="min-h-screen flex flex-col gap-y-4">
       {types.map(({ type, data }, index) => (
         <RecentSection key={index} type={type} list={data} />
       ))}
@@ -54,15 +54,18 @@ function RecentSection<T extends TypeItem>({ type, list }: RecentSectionProps<T>
   }[type]
 
   return (
-    <section>
-      <div className="mb-6 flex items-center justify-between">
-        <h2 className="text-3xl font-bold capitalize">{`Latest ${type}`}</h2>
-        <Link href={`/${type}`} className="text-primary hover:underline">
-          View All
+    <section className="flex flex-col gap-y-4">
+      <div className="flex items-center justify-between">
+        <h2 className="text-2xl font-bold capitalize">{`Latest ${type}`}</h2>
+        <Link
+          href={`/${type}`}
+          className="text-muted-foreground hover:text-foreground transition-colors text-sm"
+        >
+          {'View All'}
         </Link>
       </div>
       {list.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {list.map((item) => (
             <CardComponent key={item.id} {...item} />
           ))}
@@ -70,8 +73,8 @@ function RecentSection<T extends TypeItem>({ type, list }: RecentSectionProps<T>
       ) : (
         <Empty>
           <EmptyHeader>
-            <EmptyTitle>No items found</EmptyTitle>
-            <EmptyDescription>There are no {type} to display at this time.</EmptyDescription>
+            <EmptyTitle>{`No ${type} found`}</EmptyTitle>
+            <EmptyDescription>{`There are no ${type} to display at this time.`}</EmptyDescription>
           </EmptyHeader>
         </Empty>
       )}

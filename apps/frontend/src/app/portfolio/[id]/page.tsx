@@ -4,7 +4,6 @@ import fetch from '@/lib/api'
 import { downloadImages, getLocalImagePaths } from '@/lib/download-images'
 import { SheetType, type Portfolio } from '@caoji/shared'
 import { format } from 'date-fns'
-import { zhTW } from 'date-fns/locale'
 
 export const dynamic = 'force-static'
 export const dynamicParams = false
@@ -39,32 +38,18 @@ function PortfolioDetail({ item }: { item: Portfolio }) {
   const localImages = getLocalImagePaths(SheetType.Portfolio, item.id, item.images)
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen flex flex-col gap-y-4">
       <BreadcrumbNav
-        className="mb-6"
         items={[
           { label: 'Home', href: '/' },
           { label: 'Portfolio', href: '/portfolio' },
           { label: item.title }
         ]}
       />
-
-      <article>
-        <header className="mb-8">
-          <h1 className="mb-4 text-4xl font-bold">{item.title}</h1>
-          <time className="text-muted-foreground">
-            {format(item.datetime, 'PPP', { locale: zhTW })}
-          </time>
-        </header>
-
-        <ImageCarousel images={localImages} title={item.title} />
-
-        <div className="prose prose-lg max-w-none">
-          <div className="rounded-lg border bg-card p-8 shadow-sm">
-            <p className="whitespace-pre-wrap text-card-foreground">{item.content}</p>
-          </div>
-        </div>
-      </article>
+      <h1 className="text-4xl font-bold capitalize">{item.title}</h1>
+      <time className="text-sm text-muted-foreground">{format(item.datetime, 'PPP')}</time>
+      <ImageCarousel images={localImages} title={item.title} />
+      <span className="whitespace-pre-wrap leading-relaxed">{item.content}</span>
     </main>
   )
 }

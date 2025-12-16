@@ -13,14 +13,11 @@ export default async function PortfoliosPage() {
   const portfolio = await getPortfolio()
 
   return (
-    <main className="min-h-screen">
-      <BreadcrumbNav
-        className="mb-6"
-        items={[{ label: 'Home', href: '/' }, { label: 'Portfolio' }]}
-      />
-      <h1 className="mb-8 text-3xl font-bold">Portfolio</h1>
+    <main className="min-h-screen flex flex-col gap-y-4">
+      <BreadcrumbNav items={[{ label: 'Home', href: '/' }, { label: 'Portfolio' }]} />
+      <h1 className="text-4xl font-bold capitalize">{'Portfolio'}</h1>
       {portfolio.length > 0 ? (
-        <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
           {portfolio.map((item) => (
             <PortfolioCard key={item.id} {...item} />
           ))}
@@ -28,9 +25,9 @@ export default async function PortfoliosPage() {
       ) : (
         <Empty>
           <EmptyHeader>
-            <EmptyTitle>No portfolio items found</EmptyTitle>
+            <EmptyTitle>{'No portfolio items found'}</EmptyTitle>
             <EmptyDescription>
-              There are no portfolio items to display at this time.
+              {'There are no portfolio items to display at this time.'}
             </EmptyDescription>
           </EmptyHeader>
         </Empty>

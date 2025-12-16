@@ -46,7 +46,7 @@ function CourseDetail({ course }: { course: Course }) {
           { label: course.title }
         ]}
       />
-      <h1 className="text-4xl font-bold">{course.title}</h1>
+      <h1 className="text-4xl font-bold capitalize">{course.title}</h1>
       <time className="text-sm text-muted-foreground">{format(course.datetime, 'PPP')}</time>
       <ImageCarousel images={localImages} title={course.title} />
       <span className="whitespace-pre-wrap leading-relaxed">{course.content}</span>

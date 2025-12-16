@@ -1,4 +1,4 @@
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { getLocalImagePaths } from '@/lib/download-images'
 import { SheetType, type Portfolio } from '@caoji/shared'
 import { format } from 'date-fns'
@@ -25,10 +25,8 @@ export function PortfolioCard({ id, title, content, datetime, images }: Portfoli
         <CardHeader>
           <CardTitle className="transition-colors group-hover:text-primary">{title}</CardTitle>
           <CardDescription>{format(datetime, 'yyyy-MM-dd')}</CardDescription>
+          <span className="line-clamp-2 text-sm text-muted-foreground">{content}</span>
         </CardHeader>
-        <CardContent>
-          <p className="line-clamp-3 text-sm text-muted-foreground">{content}</p>
-        </CardContent>
       </Card>
     </Link>
   )
