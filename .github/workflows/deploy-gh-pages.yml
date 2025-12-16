@@ -21,9 +21,6 @@ jobs:
         with:
           node-version: 20
 
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
-
       - name: Auth clasp
         run: |
           echo '${{ secrets.CLASP_CREDENTIALS }}' > creds.json
@@ -31,6 +28,9 @@ jobs:
 
       - name: Generate .env
         run: yarn run gen-env
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
 
       - name: Build static site
         run: yarn run build
