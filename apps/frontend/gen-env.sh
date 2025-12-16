@@ -24,3 +24,13 @@ echo "NEXT_PUBLIC_API_ENDPOINT=$WEB_APP_URL" > "$ENV_FILE"
 
 echo "✅ Generated $ENV_FILE with:"
 echo "   NEXT_PUBLIC_API_ENDPOINT=$WEB_APP_URL"
+
+# Automatically update GitHub Repository Variable with the latest Web App URL
+REPO="kr1swang/caoji"
+if command -v gh >/dev/null 2>&1; then
+  # Use GitHub CLI to set the variable NEXT_PUBLIC_API_ENDPOINT in the repository
+  gh variable set NEXT_PUBLIC_API_ENDPOINT -b"$WEB_APP_URL" -R "$REPO"
+  echo "✅ Updated GitHub Repository Variable: NEXT_PUBLIC_API_ENDPOINT on $REPO"
+else
+  echo "⚠️ gh CLI is not installed. Cannot automatically update GitHub Repository Variable. Please set it manually."
+fi
