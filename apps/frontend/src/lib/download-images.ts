@@ -16,6 +16,8 @@ async function compressImage(buffer: Buffer, ext: string): Promise<Buffer> {
       return await sharp(buffer).jpeg({ quality: 80, mozjpeg: true }).toBuffer()
     case '.webp':
       return await sharp(buffer).webp({ quality: 80 }).toBuffer()
+    case '.gif':
+      return await sharp(buffer, { animated: true }).gif({ effort: 10 }).toBuffer()
     default:
       return buffer
   }
