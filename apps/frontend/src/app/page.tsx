@@ -25,7 +25,7 @@ export default async function HomePage() {
   ]
 
   return (
-    <main className="min-h-screen flex flex-col gap-y-4">
+    <main className="min-h-screen flex flex-col gap-y-8">
       {types.map(({ type, data }, index) => (
         <RecentSection key={index} type={type} list={data} />
       ))}
